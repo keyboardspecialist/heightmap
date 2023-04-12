@@ -13,7 +13,7 @@ namespace Heightmap
 
     using HeightMap_t = struct
     {
-        int8_t data[mapWidth][mapHeight];
+        uint8_t data[mapWidth][mapHeight];
     };
 
     using Coord_t = struct

@@ -18,11 +18,11 @@ distance(const HeightMap_t& heightMap, const Coord_t& start, const Coord_t& end)
     int32_t err{dx - dy};
     int32_t e2{};
     int32_t cellDistance{};
-    int8_t curH{heightMap.data[start.x][start.y]};
+    uint8_t curH{heightMap.data[start.x][start.y]};
 
     for(;;)
     {
-        int8_t dh = std::abs(curH - heightMap.data[x0][y0]);
+        uint8_t dh = std::abs(curH - heightMap.data[x0][y0]);
         curH = heightMap.data[x0][y0];
         //std::cout << "Cell: " << x0 << ", " << y0 << " Height: " << (int)heightMap.data[x0][y0] << " Differential: " << (int)dh << " Distance: " << cellDistance << " meters" << std::endl;
         
