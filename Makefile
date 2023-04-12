@@ -13,13 +13,14 @@ OBJ=$(LIBSRC:$(SRC_DIR)/%.cc=$(BUILD_DIR)/%.o)
 CXXFLAGS=-std=c++17 -Wall -Wextra -Werror -pedantic -O3
 #CXX=clang++
 
-all: $(BUILD_DIR)/dist 
+all: $(BUILD_DIR)/dist builddir
 
 obj:  $(OBJ)
 
+builddir:
+	mkdir -p $(BUILD_DIR)
 
-
-$(BUILD_DIR)/%.o: $(LIBSRC)
+$(BUILD_DIR)/%.o: $(LIBSRC) | builddir
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/dist: $(SRC) $(OBJ)
