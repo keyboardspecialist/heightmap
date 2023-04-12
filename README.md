@@ -19,6 +19,9 @@ These are run from the root repo folder
   * ```make clean``` cleans the build dir
   * ```make test``` runs the test suite, builds if necessary
 
+### Data files
+You will need to make a data folder
+```mkdir data```
 Place any heightmap data in the ```data``` folder then run. 
 Example:
 ```
@@ -29,7 +32,7 @@ dist ../data/heightmap1.data 0,0 1,1
 
 ### Built and Tested
   - [x] MacOS
-  - [ ] Linux
+  - [x] Linux
   - [ ] Windows
 
 
