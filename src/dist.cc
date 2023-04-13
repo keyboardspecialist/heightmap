@@ -62,7 +62,7 @@ main(int argc, char** argv)
 		const auto startClock{std::chrono::high_resolution_clock::now()};
 		int32_t totalDistance{Heightmap::distance(heightMap, start, end)};
 
-		std::cout << "Actual Distance between (" << start.x << ", " << start.y 
+		std::cout << "Bresenham Distance between (" << start.x << ", " << start.y 
 		<< ") and (" << end.x << ", " << end.y <<"): " << totalDistance << " meters" << std::endl;
 
 		int32_t idaDist{std::get<0>(Heightmap::idastar::ida_star(heightMap, start, end))};

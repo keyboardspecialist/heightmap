@@ -123,7 +123,7 @@ moveCell(const HeightMap_t& hm, const Coord_t& cell, const Direction_t& dir)
     if(valid_move(tc))
     {
         Cost_t cost = cellWidth + (std::abs(hm.data[tc.x][tc.y] - hm.data[cell.x][cell.y]) * cellHeight);
-        std::cout << "Cell: " << tc.x << ", " << tc.y << " Cost: " << cost << ", Direction: " << dirToString(dir) << std::endl;
+    //    std::cout << "Cell: " << tc.x << ", " << tc.y << " Cost: " << cost << ", Direction: " << dirToString(dir) << std::endl;
         return {tc, cost, true};
     }
 
