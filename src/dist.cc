@@ -65,6 +65,10 @@ main(int argc, char** argv)
 		std::cout << "Actual Distance between (" << start.x << ", " << start.y 
 		<< ") and (" << end.x << ", " << end.y <<"): " << totalDistance << " meters" << std::endl;
 
+		int32_t idaDist{std::get<0>(Heightmap::idastar::ida_star(heightMap, start, end))};
+		std::cout << "IDA* Distance between (" << start.x << ", " << start.y
+		<< ") and (" << end.x << ", " << end.y << "): " << idaDist << " meters" << std::endl;
+
 		const auto endClock{std::chrono::high_resolution_clock::now()};
 		const auto duration{std::chrono::duration_cast<std::chrono::microseconds>(endClock - startClock).count()};
 		std::cout << "Time taken: " << duration << "us" << std::endl;

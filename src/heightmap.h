@@ -2,6 +2,11 @@
 
 #include <cmath>
 #include <cstdint>
+#include <functional>
+#include <memory>
+#include <algorithm>
+#include <tuple>
+#include <iostream>
 
 
 namespace Heightmap
@@ -21,7 +26,36 @@ namespace Heightmap
     {
         int32_t x;
         int32_t y;
+
+        bool operator==(const Coord_t& rhs) const noexcept
+        {
+            return x == rhs.x && y == rhs.y;
+        }
     };
+
+
+    namespace idastar 
+    {
+        using Cost_t = int32_t;
+        using SearchState_t = std::tuple<Cost_t, bool>;
+        using MoveState_t = std::tuple<Coord_t, Cost_t, bool>;
+        // use this to replay the path
+        enum class Direction_t : uint8_t
+        {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT,
+            UP_LEFT,
+            UP_RIGHT,
+            DOWN_LEFT,
+            DOWN_RIGHT,
+            NONE,
+        };
+
+        [[nodiscard]] SearchState_t ida_star(const HeightMap_t& hm, const Coord_t& root, const Coord_t& goal) noexcept;
+    }
+
 
 
     [[nodiscard]] int32_t distance(const HeightMap_t& heightMap, const Coord_t& start, const Coord_t& end) noexcept;
