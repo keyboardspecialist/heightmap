@@ -39,7 +39,6 @@ namespace Heightmap
         using Cost_t = int32_t;
         using SearchState_t = std::tuple<Cost_t, bool>;
         using MoveState_t = std::tuple<Coord_t, Cost_t, bool>;
-        // use this to replay the path
         enum class Direction_t : uint8_t
         {
             UP,
