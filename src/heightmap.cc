@@ -48,6 +48,8 @@ distance(const HeightMap_t& heightMap, const Coord_t& start, const Coord_t& end)
 }
 
 
+
+
 namespace idastar
 {
 
@@ -83,7 +85,7 @@ dirToString(const Direction_t& dir)
 }
 
 MoveState_t
-moveCell(const HeightMap_t& hm, const Coord_t& cell, const Direction_t& dir)
+moveCell(const HeightMap_t& hm, Coord_t cell, const Direction_t& dir)
 {
     Coord_t tc = cell;
     switch(dir)
@@ -115,6 +117,7 @@ moveCell(const HeightMap_t& hm, const Coord_t& cell, const Direction_t& dir)
         case Direction_t::DOWN_RIGHT:
             tc.x += 1;
             tc.y += 1;
+
             break;
         case Direction_t::NONE:
             break;
@@ -122,7 +125,7 @@ moveCell(const HeightMap_t& hm, const Coord_t& cell, const Direction_t& dir)
 
     if(valid_move(tc))
     {
-        Cost_t cost = cellWidth + (std::abs(hm.data[tc.x][tc.y] - hm.data[cell.x][cell.y]) * cellHeight);
+        Cost_t cost = cellWidth + (std::abs(hm.data[cell.x][cell.y] - hm.data[tc.x][tc.y]) * cellHeight);
     //    std::cout << "Cell: " << tc.x << ", " << tc.y << " Cost: " << cost << ", Direction: " << dirToString(dir) << std::endl;
         return {tc, cost, true};
     }
@@ -140,36 +143,32 @@ dfs_contour(const HeightMap_t& hm,
             std::function<Cost_t(const Coord_t&,const Coord_t&)> costFn)
 {
     Cost_t f = g + costFn(cell, goal);
-    if(f > bound)
+     if(f > bound)
         return {f, false};
-    
+
     if(cell == goal)
-    {
         return {g, true};
-    }
 
     //std::cout << "Cell: " << cell.x << ", " << cell.y << " Cost: " << g << std::endl;
-
-    Coord_t tc = cell;
     Cost_t min{std::numeric_limits<Cost_t>::max()};
-    for(auto d : {  Direction_t::UP, 
+    for(auto d : {  
+                    Direction_t::UP, 
                     Direction_t::DOWN, 
                     Direction_t::LEFT, 
                     Direction_t::RIGHT,
                     Direction_t::UP_LEFT, 
                     Direction_t::UP_RIGHT, 
                     Direction_t::DOWN_LEFT, 
-                    Direction_t::DOWN_RIGHT
+                    Direction_t::DOWN_RIGHT                   
                     })
     {
-        if(dir == d)
+        if(dir == d) //dont backtrack
             continue;
-        MoveState_t ms = moveCell(hm, tc, dir);
-        if(std::get<2>(ms) == true)
+        const auto [coord, cost, valid] = moveCell(hm, cell, d);
+         if(valid == true)
         {
-            tc = std::get<0>(ms);
-            Cost_t ng = g + std::get<1>(ms);
-            const auto [t, found] = dfs_contour(hm, tc, goal, ng, bound, d, costFn);
+            Cost_t ng = g + cost;
+            const auto [t, found] = dfs_contour(hm, coord, goal, ng, bound, d, costFn);
             if(found)
                 return {t, true};
 
@@ -188,10 +187,10 @@ ida_star(const HeightMap_t& hm, const Coord_t& root, const Coord_t& goal) noexce
     {
         const int32_t dx{std::abs(start.x - goal.x)};
         const int32_t dy{std::abs(start.y - goal.y)};
-        const int32_t D{cellWidth + cellHeight}; 
-        const int32_t D2{D * 2};
+        const int32_t D{cellWidth+cellHeight}; 
+       // const int32_t D2{D}; //dont need D2 since cost is same as D
 
-        return D * (dx + dy) + (D2 - 2 * D) * std::min(dx, dy);
+        return D * (dx + dy) + (D - 2 * D) * std::min(dx, dy);
     };
     auto bound = heuristic(root, goal);
 
@@ -205,12 +204,11 @@ ida_star(const HeightMap_t& hm, const Coord_t& root, const Coord_t& goal) noexce
     {
         //descend
         const auto [t, found] = dfs_contour(hm, root, goal, 0, bound, Direction_t::NONE, heuristic);
-
+        std::cout << "Iteration: " << dbgIter++ << ", Bound: " << bound << ", t: " << t << std::endl;
+        bound = t;
+        
         if(found)
             return {t, true};
-
-        std::cout << "Iteration: " << dbgIter++ << " Bound: " << bound << std::endl;
-        bound = t;
     }
 }
 
