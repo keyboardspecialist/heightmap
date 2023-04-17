@@ -36,7 +36,7 @@ namespace Heightmap
 
     namespace idastar 
     {
-        using Cost_t = int32_t;
+        using Cost_t = double;
         using SearchState_t = std::tuple<Cost_t, bool>;
         using MoveState_t = std::tuple<Coord_t, Cost_t, bool>;
         enum class Direction_t : uint8_t
@@ -57,5 +57,5 @@ namespace Heightmap
 
 
 
-    [[nodiscard]] int32_t distance(const HeightMap_t& heightMap, const Coord_t& start, const Coord_t& end) noexcept;
+    [[nodiscard]] double distance(const HeightMap_t& heightMap, const Coord_t& start, const Coord_t& end) noexcept;
 }

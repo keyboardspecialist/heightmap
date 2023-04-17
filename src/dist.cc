@@ -60,12 +60,12 @@ main(int argc, char** argv)
 		file.close();
 
 		const auto startClock{std::chrono::high_resolution_clock::now()};
-		int32_t totalDistance{Heightmap::distance(heightMap, start, end)};
+		double totalDistance{Heightmap::distance(heightMap, start, end)};
 
 		std::cout << "Bresenham Distance between (" << start.x << ", " << start.y 
 		<< ") and (" << end.x << ", " << end.y <<"): " << totalDistance << " meters" << std::endl;
 
-		int32_t idaDist{std::get<0>(Heightmap::idastar::ida_star(heightMap, start, end))};
+		double idaDist{std::get<0>(Heightmap::idastar::ida_star(heightMap, start, end))};
 		std::cout << "IDA* Distance between (" << start.x << ", " << start.y
 		<< ") and (" << end.x << ", " << end.y << "): " << idaDist << " meters" << std::endl;
 
